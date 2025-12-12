@@ -51,18 +51,26 @@ export default function PlayerDetail() {
                             away_team:teams!away_team_id(name)
                         )
                     `)
-                    .eq('player_id', id)
-                    .order('matches(match_date)', { ascending: false }); // Sort by date
+                    .eq('player_id', id);
+
+                console.log('Stats Data for player', id, ':', statsData, statsError);
 
                 if (!statsError && statsData) {
-                    setGameLog(statsData);
+                    // Sort by match date descending (most recent first)
+                    const sortedStats = statsData.sort((a, b) => {
+                        const dateA = a.matches?.match_date ? new Date(a.matches.match_date) : new Date(0);
+                        const dateB = b.matches?.match_date ? new Date(b.matches.match_date) : new Date(0);
+                        return dateB - dateA;
+                    });
+
+                    setGameLog(sortedStats);
 
                     // Calculate Averages
-                    const totalGames = statsData.length;
+                    const totalGames = sortedStats.length;
                     if (totalGames > 0) {
-                        const totalPoints = statsData.reduce((sum, s) => sum + (s.points || 0), 0);
-                        const totalRebounds = statsData.reduce((sum, s) => sum + (s.rebounds || 0), 0);
-                        const totalAssists = statsData.reduce((sum, s) => sum + (s.assists || 0), 0);
+                        const totalPoints = sortedStats.reduce((sum, s) => sum + (s.points || 0), 0);
+                        const totalRebounds = sortedStats.reduce((sum, s) => sum + (s.rebounds || 0), 0);
+                        const totalAssists = sortedStats.reduce((sum, s) => sum + (s.assists || 0), 0);
 
                         setStats({
                             games: totalGames,

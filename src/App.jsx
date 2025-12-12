@@ -7,6 +7,7 @@ import PlayerDetail from './pages/PlayerDetail';
 import LeagueList from './pages/Public/LeagueList';
 import LeagueDetail from './pages/Public/LeagueDetail';
 import TeamDetail from './pages/Public/TeamDetail';
+import MatchDetail from './pages/Public/MatchDetail';
 import Login from './pages/Login';
 import Dashboard from './pages/Admin/Dashboard';
 import PlayerManager from './pages/Admin/PlayerManager';
@@ -31,6 +32,7 @@ function App() {
         <Route path="ligas" element={<LeagueList />} />
         <Route path="leagues/:id" element={<LeagueDetail />} />
         <Route path="teams/:id" element={<TeamDetail />} />
+        <Route path="matches/:id" element={<MatchDetail />} />
         <Route path="login" element={<Login />} />
 
         {/* Admin Routes */}

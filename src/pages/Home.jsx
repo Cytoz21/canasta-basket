@@ -20,7 +20,7 @@ export default function Home() {
                             Ver Jugadores <ArrowRight size={20} />
                         </Link>
                         <Link to="/ligas" className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-bold backdrop-blur-sm transition-all">
-                            Explorar Liguar
+                            Explorar Ligas
                         </Link>
                     </div>
                 </div>
@@ -42,8 +42,8 @@ export default function Home() {
                         />
                         <FeatureCard
                             icon={<Activity size={40} className="text-secondary-light" />}
-                            title="Estadísticas (Pronto)"
-                            desc="Monitoreo de rendimiento: puntos, rebotes y asistencias en tiempo real."
+                            title="Estadísticas"
+                            desc="Monitoreo de rendimiento: puntos, rebotes, asistencias y eficiencia por partido."
                         />
                     </div>
                 </div>

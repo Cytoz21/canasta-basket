@@ -21,7 +21,10 @@ export default function PlayerList() {
           last_name, 
           position, 
           photo_url,
-          teams ( name )
+          player_team_seasons (
+            season,
+            teams ( name )
+          )
         `)
                 .order('last_name', { ascending: true });
 
@@ -71,7 +74,9 @@ export default function PlayerList() {
                                 )}
                                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 translate-y-2 group-hover:translate-y-0 transition-transform">
                                     <p className="text-white font-bold truncate">{player.first_name} {player.last_name}</p>
-                                    <p className="text-gray-200 text-xs">{player.teams?.name}</p>
+                                    <p className="text-gray-200 text-xs">
+                                        {player.player_team_seasons?.[0]?.teams?.name || 'Sin Equipo'}
+                                    </p>
                                 </div>
                             </div>
                             <div className="p-4 relative">

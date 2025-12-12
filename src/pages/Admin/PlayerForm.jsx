@@ -16,10 +16,15 @@ export default function PlayerForm() {
         last_name: '',
         age: '',
         height: '',
-        number_player: '',
         position: '',
-        team_id: '',
         photo_url: ''
+    });
+
+    // Estado separado para la temporada actual/asignación
+    const [seasonData, setSeasonData] = useState({
+        team_id: '',
+        season: new Date().getFullYear().toString(),
+        jersey_number: ''
     });
 
     useEffect(() => {
@@ -33,8 +38,27 @@ export default function PlayerForm() {
     }
 
     async function fetchPlayer() {
-        const { data } = await supabase.from('players').select('*').eq('id', id).single();
-        if (data) setFormData(data);
+        const { data: player } = await supabase.from('players').select('*').eq('id', id).single();
+        if (player) {
+            setFormData(player);
+
+            // Fetch latest season data if exists
+            const { data: season } = await supabase
+                .from('player_team_seasons')
+                .select('*')
+                .eq('player_id', id)
+                .order('season', { ascending: false })
+                .limit(1)
+                .single();
+
+            if (season) {
+                setSeasonData({
+                    team_id: season.team_id,
+                    season: season.season,
+                    jersey_number: season.jersey_number || ''
+                });
+            }
+        }
     }
 
     async function handlePhotoUpload(e) {
@@ -68,21 +92,51 @@ export default function PlayerForm() {
         e.preventDefault();
         setLoading(true);
 
-        const payload = { ...formData };
-        if (payload.age === '') payload.age = null;
-        if (payload.height === '') payload.height = null;
-        if (payload.team_id === '') payload.team_id = null;
-        if (payload.number_player === '') payload.number_player = null;
+        const playerPayload = { ...formData };
+        if (playerPayload.age === '') playerPayload.age = null;
+        if (playerPayload.height === '') playerPayload.height = null;
 
         try {
+            let playerId = id;
             let error;
+
+            // 1. Save Player Core Data
             if (isEditing) {
-                ({ error } = await supabase.from('players').update(payload).eq('id', id));
+                ({ error } = await supabase.from('players').update(playerPayload).eq('id', id));
             } else {
-                ({ error } = await supabase.from('players').insert([payload]));
+                const { data: newPlayer, error: insertError } = await supabase.from('players').insert([playerPayload]).select().single();
+                error = insertError;
+                if (newPlayer) playerId = newPlayer.id;
             }
 
             if (error) throw error;
+
+            // 2. Save Season/Team Data (if team is selected)
+            if (seasonData.team_id && seasonData.season) {
+                // Get League ID from Team
+                const { data: team } = await supabase.from('teams').select('league_id').eq('id', seasonData.team_id).single();
+
+                if (team) {
+                    const seasonPayload = {
+                        player_id: playerId,
+                        team_id: seasonData.team_id,
+                        league_id: team.league_id,
+                        season: seasonData.season,
+                        jersey_number: seasonData.jersey_number || null
+                    };
+
+                    // Upsert based on unique constraint (player_id, team_id, league_id, season)
+                    // Note: Supabase upsert needs all unique columns to match for update, or it inserts.
+                    // For simplicity, we just insert and ignore conflicts or we try to upsert matching ID if we knew it.
+                    // Let's just standard insert/upsert.
+                    const { error: seasonError } = await supabase
+                        .from('player_team_seasons')
+                        .upsert(seasonPayload, { onConflict: 'player_id, team_id, league_id, season' });
+
+                    if (seasonError) console.error("Error saving season:", seasonError);
+                }
+            }
+
             navigate('/admin/players');
         } catch (error) {
             alert('Error saving player: ' + error.message);
@@ -163,13 +217,18 @@ export default function PlayerForm() {
                         </select>
                     </div>
 
+                    <div className="md:col-span-2 border-t pt-4 mt-2">
+                        <h3 className="font-bold text-gray-700 mb-4">Temporada Actual / Asignación</h3>
+                    </div>
+
                     <div>
-                        <label className="label">Número (Dorsal)</label>
+                        <label className="label">Temporada</label>
                         <input
-                            type="number"
+                            type="text"
                             className="input-field"
-                            value={formData.number_player}
-                            onChange={e => setFormData({ ...formData, number_player: e.target.value })}
+                            placeholder="Ej. 2024"
+                            value={seasonData.season}
+                            onChange={e => setSeasonData({ ...seasonData, season: e.target.value })}
                         />
                     </div>
 
@@ -177,14 +236,24 @@ export default function PlayerForm() {
                         <label className="label">Equipo</label>
                         <select
                             className="input-field"
-                            value={formData.team_id || ''}
-                            onChange={e => setFormData({ ...formData, team_id: e.target.value })}
+                            value={seasonData.team_id}
+                            onChange={e => setSeasonData({ ...seasonData, team_id: e.target.value })}
                         >
                             <option value="">Sin equipo</option>
                             {teams.map(t => (
                                 <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
                             ))}
                         </select>
+                    </div>
+
+                    <div>
+                        <label className="label">Número (Dorsal)</label>
+                        <input
+                            type="number"
+                            className="input-field"
+                            value={seasonData.jersey_number}
+                            onChange={e => setSeasonData({ ...seasonData, jersey_number: e.target.value })}
+                        />
                     </div>
 
                     <div>

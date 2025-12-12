@@ -241,13 +241,21 @@ export default function MatchStats() {
                         </p>
                     </div>
                 </div>
-                <button
-                    onClick={handleSaveAll}
-                    disabled={loading}
-                    className="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors"
-                >
-                    <Save size={20} /> Guardar Todo
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => navigate('/admin/matches')}
+                        className="bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 px-6 py-2 rounded-lg font-bold transition-colors"
+                    >
+                        Finalizar
+                    </button>
+                    <button
+                        onClick={handleSaveAll}
+                        disabled={loading}
+                        className="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors"
+                    >
+                        <Save size={20} /> Guardar Cambios
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 gap-8">

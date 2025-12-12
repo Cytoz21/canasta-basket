@@ -75,10 +75,19 @@ export default function MatchForm() {
             }
         }
 
-        const { error } = await supabase.from('matches').insert([payload]);
+        let matchId = id;
+        if (isEditing) {
+            ({ error } = await supabase.from('matches').update(payload).eq('id', id));
+        } else {
+            const { data, error: insertError } = await supabase.from('matches').insert([payload]).select().single();
+            error = insertError;
+            if (data) matchId = data.id;
+        }
 
-        if (error) {
-            alert('Error al guardar partido: ' + error.message);
+        if (error) throw error;
+
+        if (payload.status === 'finished') {
+            navigate(`/admin/matches/${matchId}/stats`);
         } else {
             navigate('/admin/matches');
         }
@@ -231,7 +240,8 @@ export default function MatchForm() {
                     disabled={loading}
                     className="w-full bg-secondary hover:bg-secondary-light text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2 mt-6"
                 >
-                    <Save size={20} /> {loading ? 'Guardando...' : 'Guardar Partido'}
+                    <Save size={20} />
+                    {loading ? 'Guardando...' : (formData.status === 'finished' ? 'Guardar y Registrar Estadísticas' : 'Guardar Partido')}
                 </button>
             </form>
         </div>

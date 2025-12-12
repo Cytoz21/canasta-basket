@@ -17,6 +17,7 @@ import LeagueManager from './pages/Admin/LeagueManager';
 import LeagueForm from './pages/Admin/LeagueForm';
 import MatchManager from './pages/Admin/MatchManager';
 import MatchForm from './pages/Admin/MatchForm';
+import MatchStats from './pages/Admin/MatchStats';
 import CategoryManager from './pages/Admin/CategoryManager';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -49,6 +50,7 @@ function App() {
 
           <Route path="admin/matches" element={<MatchManager />} />
           <Route path="admin/matches/new" element={<MatchForm />} />
+          <Route path="admin/matches/:id/stats" element={<MatchStats />} />
 
           <Route path="admin/categories" element={<CategoryManager />} />
         </Route>

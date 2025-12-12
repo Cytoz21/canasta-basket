@@ -14,16 +14,32 @@ export default function TeamDetail() {
     }, [id]);
 
     async function fetchTeamData() {
-        const { data: teamData } = await supabase.from('teams').select('*, league:leagues(name)').eq('id', id).single();
+        // Fetch team and its league to know the season
+        const { data: teamData } = await supabase.from('teams').select('*, league:leagues(name, season)').eq('id', id).single();
         setTeam(teamData);
 
-        const { data: playersData } = await supabase
-            .from('players')
-            .select('*')
-            .eq('team_id', id)
-            .order('number_player', { ascending: true }); // Order by dorsal number
+        if (teamData?.league?.season) {
+            // Fetch roster from player_team_seasons
+            const { data: seasonData } = await supabase
+                .from('player_team_seasons')
+                .select(`
+                    jersey_number,
+                    player:players(*)
+                `)
+                .eq('team_id', id)
+                .eq('season', teamData.league.season)
+                .order('jersey_number', { ascending: true });
 
-        setPlayers(playersData || []);
+            // Map structure to flatten player data for valid rendering
+            const mappedPlayers = (seasonData || []).map(item => ({
+                ...item.player,
+                number_player: item.jersey_number // Map jersey_number to number_player for display compatibility
+            }));
+
+            setPlayers(mappedPlayers);
+        } else {
+            setPlayers([]);
+        }
         setLoading(false);
     }
 

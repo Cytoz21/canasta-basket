@@ -13,16 +13,36 @@ export default function PlayerDetail() {
             const { data, error } = await supabase
                 .from('players')
                 .select(`
-          *,
-          teams ( name, category, league_id )
-        `)
+                  *,
+                  player_team_seasons (
+                    season,
+                    jersey_number,
+                    teams ( name, category, league_id )
+                  )
+                `)
                 .eq('id', id)
+                // We want the functionality of ordering the inner relation, but supabase JS syntax for inner order is different or requires separate query sometimes.
+                // Actually, standardized way: .order('season', { foreignTable: 'player_team_seasons', ascending: false })
+                // But let's check if we can just do it in the string or chain.
+                // Simpler: Just Map and Sort in JS for safety if multiple seasons exist.
                 .single();
 
             if (error) {
                 console.error('Error fetching player:', error);
             } else {
-                setPlayer(data);
+                // Transform data: Find latest season
+                const seasons = data.player_team_seasons || [];
+                // Sort descending by season (string comparison works for years "2025" > "2024")
+                seasons.sort((a, b) => b.season.localeCompare(a.season));
+
+                const currentSeason = seasons[0];
+
+                const processedPlayer = {
+                    ...data,
+                    teams: currentSeason?.teams,
+                    number_player: currentSeason?.jersey_number
+                };
+                setPlayer(processedPlayer);
             }
             setLoading(false);
         }

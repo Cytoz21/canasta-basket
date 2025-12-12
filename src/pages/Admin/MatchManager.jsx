@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { useNavigate, Link } from 'react-router-dom';
-import { Calendar, Plus, Trophy, ArrowRight, Shield } from 'lucide-react';
+import { Calendar, Plus, Trophy, ArrowRight, Shield, Activity } from 'lucide-react';
 
 export default function MatchManager() {
     const [matches, setMatches] = useState([]);
@@ -76,11 +76,14 @@ export default function MatchManager() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right">
                                     <span className={`px-2 py-1 text-xs font-bold rounded-full ${match.status === 'finished'
-                                            ? 'bg-green-100 text-green-700'
-                                            : 'bg-yellow-100 text-yellow-700'
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-yellow-100 text-yellow-700'
                                         }`}>
                                         {match.status === 'finished' ? 'Finalizado' : 'Programado'}
                                     </span>
+                                    <Link to={`/admin/matches/${match.id}/stats`} className="ml-4 inline-flex items-center text-primary hover:text-primary-dark" title="Estadísticas">
+                                        <Activity size={18} />
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

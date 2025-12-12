@@ -15,11 +15,31 @@ export default function PlayerManager() {
     async function fetchPlayers() {
         const { data, error } = await supabase
             .from('players')
-            .select('*, teams(name)')
+            .select(`
+                *,
+                player_team_seasons (
+                    season,
+                    teams ( name, category )
+                )
+            `)
             .order('created_at', { ascending: false });
 
         if (error) console.error('Error:', error);
-        else setPlayers(data || []);
+        else {
+            // Process data for easier rendering
+            const processed = (data || []).map(p => {
+                // Find latest season/team
+                const seasons = p.player_team_seasons || [];
+                seasons.sort((a, b) => b.season.localeCompare(a.season));
+                const current = seasons[0];
+                return {
+                    ...p,
+                    team_name: current?.teams?.name,
+                    team_category: current?.teams?.category
+                };
+            });
+            setPlayers(processed);
+        }
         setLoading(false);
     }
 
@@ -91,8 +111,8 @@ export default function PlayerManager() {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{player.teams?.name || '-'}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{player.teams?.category || '-'}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{player.team_name || '-'}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{player.team_category || '-'}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <Link to={`/admin/players/${player.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4 inline-block">
                                         <Edit size={18} />

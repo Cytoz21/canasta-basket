@@ -65,19 +65,35 @@ export default function PlayerDetail() {
 
                     setGameLog(sortedStats);
 
-                    // Calculate Averages
+                    // Calculate Averages & Percentages
                     const totalGames = sortedStats.length;
                     if (totalGames > 0) {
                         const totalPoints = sortedStats.reduce((sum, s) => sum + (s.points || 0), 0);
                         const totalRebounds = sortedStats.reduce((sum, s) => sum + (s.rebounds || 0), 0);
                         const totalAssists = sortedStats.reduce((sum, s) => sum + (s.assists || 0), 0);
 
+                        // Shooting Stats
+                        const total2PM = sortedStats.reduce((sum, s) => sum + (parseInt(s.two_points_made) || 0), 0);
+                        const total2PA = sortedStats.reduce((sum, s) => sum + (parseInt(s.two_points_attempted) || 0), 0);
+                        const total3PM = sortedStats.reduce((sum, s) => sum + (parseInt(s.three_points_made) || 0), 0);
+                        const total3PA = sortedStats.reduce((sum, s) => sum + (parseInt(s.three_points_attempted) || 0), 0);
+                        const totalFTM = sortedStats.reduce((sum, s) => sum + (parseInt(s.free_throws_made) || 0), 0);
+                        const totalFTA = sortedStats.reduce((sum, s) => sum + (parseInt(s.free_throws_attempted) || 0), 0);
+
                         setStats({
                             games: totalGames,
                             ppg: (totalPoints / totalGames).toFixed(1),
                             rpg: (totalRebounds / totalGames).toFixed(1),
                             apg: (totalAssists / totalGames).toFixed(1),
-                            total_points: totalPoints
+                            total_points: totalPoints,
+                            // Percentages
+                            fg2_pct: total2PA > 0 ? ((total2PM / total2PA) * 100).toFixed(1) : '0.0',
+                            fg3_pct: total3PA > 0 ? ((total3PM / total3PA) * 100).toFixed(1) : '0.0',
+                            ft_pct: totalFTA > 0 ? ((totalFTM / totalFTA) * 100).toFixed(1) : '0.0',
+                            // Raw counts for display
+                            fg2: `${total2PM}/${total2PA}`,
+                            fg3: `${total3PM}/${total3PA}`,
+                            ft: `${totalFTM}/${totalFTA}`
                         });
                     }
                 }
@@ -137,12 +153,33 @@ export default function PlayerDetail() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
                         <StatBox label="Partidos" value={stats.games} />
-                        <StatBox label="Puntos/P" value={stats.ppg} highlight />
-                        <StatBox label="Rebotes/P" value={stats.rpg} />
-                        <StatBox label="Asistencias/P" value={stats.apg} />
+                        <StatBox label="PPG" value={stats.ppg} highlight />
+                        <StatBox label="RPG" value={stats.rpg} />
+                        <StatBox label="APG" value={stats.apg} />
                     </div>
+
+                    {/* Shooting Percentages */}
+                    {stats.games > 0 && (
+                        <div className="grid grid-cols-3 gap-3 mt-4">
+                            <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 text-center">
+                                <p className="text-xs text-blue-600 font-bold uppercase mb-1">2 Puntos</p>
+                                <p className="text-2xl font-black text-blue-800">{stats.fg2_pct}%</p>
+                                <p className="text-xs text-blue-500">{stats.fg2}</p>
+                            </div>
+                            <div className="bg-orange-50 border border-orange-100 rounded-lg p-3 text-center">
+                                <p className="text-xs text-orange-600 font-bold uppercase mb-1">3 Puntos</p>
+                                <p className="text-2xl font-black text-orange-800">{stats.fg3_pct}%</p>
+                                <p className="text-xs text-orange-500">{stats.fg3}</p>
+                            </div>
+                            <div className="bg-green-50 border border-green-100 rounded-lg p-3 text-center">
+                                <p className="text-xs text-green-600 font-bold uppercase mb-1">Tiros Libres</p>
+                                <p className="text-2xl font-black text-green-800">{stats.ft_pct}%</p>
+                                <p className="text-xs text-green-500">{stats.ft}</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

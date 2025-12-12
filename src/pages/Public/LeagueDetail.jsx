@@ -164,8 +164,8 @@ export default function LeagueDetail() {
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-bold transition-colors ${selectedCategory === cat
-                                    ? 'bg-secondary text-white shadow-lg'
-                                    : 'bg-white text-gray-600 hover:bg-slate-50 border border-slate-200'
+                                ? 'bg-secondary text-white shadow-lg'
+                                : 'bg-white text-gray-600 hover:bg-slate-50 border border-slate-200'
                                 }`}
                         >
                             {cat}
@@ -179,8 +179,8 @@ export default function LeagueDetail() {
                 <button
                     onClick={() => setActiveTab('standings')}
                     className={`px-6 py-4 font-bold text-sm flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'standings'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
                         }`}
                 >
                     <LayoutList size={18} /> Tabla de Posiciones
@@ -188,8 +188,8 @@ export default function LeagueDetail() {
                 <button
                     onClick={() => setActiveTab('matches')}
                     className={`px-6 py-4 font-bold text-sm flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'matches'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
                         }`}
                 >
                     <Calendar size={18} /> Resultados y Fixture
@@ -197,8 +197,8 @@ export default function LeagueDetail() {
                 <button
                     onClick={() => setActiveTab('teams')}
                     className={`px-6 py-4 font-bold text-sm flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'teams'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
                         }`}
                 >
                     <Shield size={18} /> Equipos
@@ -265,6 +265,11 @@ export default function LeagueDetail() {
                                 <span className="text-sm font-medium text-gray-600">
                                     {match.match_date ? new Date(match.match_date).toLocaleDateString() : 'Fecha TBD'}
                                 </span>
+                                {match.status === 'finished' && (
+                                    <Link to={`/matches/${match.id}`} className="inline-block mt-2 text-xs font-bold text-primary hover:underline">
+                                        Ver Estadísticas
+                                    </Link>
+                                )}
                             </div>
 
                             <div className="flex-1 flex items-center justify-center gap-8 w-full md:w-auto">

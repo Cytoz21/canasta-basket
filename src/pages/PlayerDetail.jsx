@@ -139,12 +139,13 @@ export default function PlayerDetail() {
             </div>
 
             {/* Game Log Section */}
-            {stats.games > 0 && (
+            {stats.games > 0 ? (
                 <div className="animate-fadeIn">
                     <h3 className="text-xl font-bold text-secondary mb-4">Historial de Partidos</h3>
                     <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
+                                {/* ... table header ... */}
                                 <thead className="bg-slate-50 text-xs text-gray-500 uppercase font-bold border-b">
                                     <tr>
                                         <th className="px-4 py-3 text-left">Fecha</th>
@@ -192,6 +193,10 @@ export default function PlayerDetail() {
                             </table>
                         </div>
                     </div>
+                </div>
+            ) : (
+                <div className="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-gray-300">
+                    <p className="text-gray-500 font-medium">No hay estadísticas registradas para este jugador en la temporada actual.</p>
                 </div>
             )}
         </div>

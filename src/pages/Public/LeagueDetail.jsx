@@ -266,8 +266,11 @@ export default function LeagueDetail() {
                                     {match.match_date ? new Date(match.match_date).toLocaleDateString() : 'Fecha TBD'}
                                 </span>
                                 {match.status === 'finished' && (
-                                    <Link to={`/matches/${match.id}`} className="inline-block mt-2 text-xs font-bold text-primary hover:underline">
-                                        Ver Estadísticas
+                                    <Link
+                                        to={`/matches/${match.id}`}
+                                        className="inline-flex items-center gap-1 mt-2 px-3 py-1 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-dark transition-colors"
+                                    >
+                                        <Trophy size={12} /> Ver Stats
                                     </Link>
                                 )}
                             </div>

@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "persona": "Juan Pérez",
+        "servicio": "Internet",
+        "monto": 50000,
+        "monto_pagado": 0,
+        "estado": "Pendiente",
+        "mes": "Enero",
+        "año": 2026,
+        "fecha": "2026-01-15",
+        "notas": "Pago mensual de internet"
+    },
+    {
+        "id": 2,
+        "persona": "María García",
+        "servicio": "Luz",
+        "monto": 75000,
+        "monto_pagado": 75000,
+        "estado": "Pagado",
+        "mes": "Enero",
+        "año": 2026,
+        "fecha": "2026-01-10",
+        "notas": "Pagado completo"
+    },
+    {
+        "id": 3,
+        "persona": "Carlos López",
+        "servicio": "Agua",
+        "monto": 30000,
+        "monto_pagado": 15000,
+        "estado": "Semi-pagado",
+        "mes": "Enero",
+        "año": 2026,
+        "fecha": "2026-01-20",
+        "notas": "Abonó la mitad"
+    },
+    {
+        "id": 4,
+        "persona": "Ana Martínez",
+        "servicio": "Gas",
+        "monto": 45000,
+        "monto_pagado": 0,
+        "estado": "Pendiente",
+        "mes": "Diciembre",
+        "año": 2025,
+        "fecha": "2025-12-28",
+        "notas": "Pendiente de pago"
+    }
+]

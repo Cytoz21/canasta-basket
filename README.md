@@ -1,16 +1,176 @@
-# React + Vite
+# 💰 Payment Manager - Gestor de Pagos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web moderna para gestionar pagos de servicios, construida con Next.js 14 y almacenamiento local JSON.
 
-Currently, two official plugins are available:
+![Payment Manager](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Características
 
-## React Compiler
+- 📊 **Dashboard Interactivo** - Visualiza estadísticas y gráficos en tiempo real
+- 💳 **Gestión de Pagos** - Crea, edita y elimina registros de pagos
+- 📈 **Gráficos Dinámicos** - Visualiza deudas por persona, servicios y tendencias mensuales
+- 🎨 **Diseño Moderno** - Interfaz elegante con modo oscuro y animaciones suaves
+- 💾 **Almacenamiento Local** - Sin necesidad de configurar bases de datos externas
+- 🚀 **Rápido y Simple** - Funciona de inmediato sin configuración adicional
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Inicio Rápido
 
-## Expanding the ESLint configuration
+### Instalación
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Clonar el repositorio (o descargar el proyecto)
+cd payment-manager
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
+npm run dev
+```
+
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000)
+
+## 📁 Estructura del Proyecto
+
+```
+payment-manager/
+├── app/                    # Páginas de Next.js 14 (App Router)
+│   ├── layout.jsx         # Layout principal
+│   ├── page.jsx           # Página principal (dashboard)
+│   └── globals.css        # Estilos globales
+├── components/            # Componentes React
+│   ├── PaymentTable.jsx   # Tabla de pagos
+│   ├── PaymentForm.jsx    # Formulario para crear/editar
+│   └── Charts.jsx         # Gráficos y estadísticas
+├── data/                  # Almacenamiento de datos
+│   └── payments.json      # Base de datos JSON local
+├── lib/                   # Utilidades y funciones
+│   └── payments.js        # Funciones CRUD para pagos
+└── package.json           # Dependencias del proyecto
+```
+
+## 💾 Sistema de Almacenamiento
+
+Esta aplicación usa un archivo JSON local (`data/payments.json`) para almacenar los datos. No requiere configuración de base de datos externa.
+
+### Estructura de Datos
+
+Cada pago tiene la siguiente estructura:
+
+```json
+{
+  "id": 1,
+  "persona": "Juan Pérez",
+  "servicio": "Internet",
+  "monto": 50000,
+  "monto_pagado": 0,
+  "estado": "Pendiente",
+  "mes": "Enero",
+  "año": 2026,
+  "fecha": "2026-01-15",
+  "notas": "Pago mensual de internet"
+}
+```
+
+### Estados de Pago
+
+- **Pendiente** - No se ha realizado ningún pago
+- **Semi-pagado** - Se ha pagado parcialmente
+- **Pagado** - Pago completado
+
+## 🛠️ Tecnologías Utilizadas
+
+- **[Next.js 14](https://nextjs.org/)** - Framework de React con App Router
+- **[React 18](https://react.dev/)** - Biblioteca de UI
+- **[Recharts](https://recharts.org/)** - Gráficos interactivos
+- **[Lucide React](https://lucide.dev/)** - Iconos modernos
+- **[date-fns](https://date-fns.org/)** - Manipulación de fechas
+
+## 📊 Funcionalidades
+
+### Dashboard Principal
+
+- Resumen de totales (Pendiente, Pagado, Semi-pagado)
+- Gráfico de deuda por persona
+- Gráfico de pagos por servicio
+- Tendencias mensuales
+
+### Gestión de Pagos
+
+- ➕ Crear nuevos pagos
+- ✏️ Editar pagos existentes
+- 🗑️ Eliminar pagos
+- 🔍 Filtrar y ordenar por fecha
+
+## 🎨 Características de Diseño
+
+- ✨ Interfaz moderna con glassmorphism
+- 🌙 Modo oscuro elegante
+- 📱 Diseño responsive
+- 🎭 Animaciones suaves
+- 🎨 Paleta de colores vibrante
+
+## 📝 Scripts Disponibles
+
+```bash
+# Desarrollo
+npm run dev
+
+# Construir para producción
+npm run build
+
+# Ejecutar en producción
+npm start
+
+# Linting
+npm run lint
+```
+
+## 🔧 Configuración
+
+No se requiere configuración adicional. La aplicación funciona de inmediato después de instalar las dependencias.
+
+Si deseas personalizar:
+
+1. **Datos iniciales**: Edita `data/payments.json`
+2. **Estilos**: Modifica `app/globals.css`
+3. **Componentes**: Personaliza los archivos en `components/`
+
+## 🚀 Despliegue
+
+### Vercel (Recomendado)
+
+1. Sube tu código a GitHub
+2. Importa el proyecto en [Vercel](https://vercel.com)
+3. Despliega con un clic
+
+### Otros Servicios
+
+La aplicación puede desplegarse en cualquier servicio que soporte Next.js:
+- Netlify
+- Railway
+- Render
+- AWS Amplify
+
+## 📄 Licencia
+
+MIT License - Siéntete libre de usar este proyecto para tus propios fines.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Si encuentras un bug o tienes una sugerencia:
+
+1. Abre un issue
+2. Haz un fork del proyecto
+3. Crea una rama para tu feature
+4. Envía un pull request
+
+## 📞 Soporte
+
+Si tienes preguntas o necesitas ayuda, abre un issue en el repositorio.
+
+---
+
+**¡Hecho con ❤️ usando Next.js!**
